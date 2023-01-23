@@ -58,10 +58,10 @@ export const BookingScreen = () => {
   return (
     <Container>
       <DatePickerContainer>
-        <Text>Date </Text>
+        <Text>Date</Text>
         <DatePicker date={date} onChange={onChangeDate} />
       </DatePickerContainer>
-      <Spacing height={16} />
+      <Spacing height={8} />
       <BookTimeItem
         date={startTime}
         minimumDate={minimumStartDate}
@@ -89,6 +89,8 @@ const Container = styled.View`
 `;
 
 const DatePickerContainer = styled.View`
+  width: 180px;
+  justify-content: space-between;
   flex-direction: row;
   align-items: center;
 `;

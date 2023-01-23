@@ -41,6 +41,8 @@ export const BookTimeItem = ({
 };
 
 const Container = styled.View`
+  width: 180px;
+  justify-content: space-between;
   flex-direction: row;
   align-items: center;
 `;
