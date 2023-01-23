@@ -17,7 +17,7 @@ export const App = () => {
       <NavigationContainer
         theme={{
           colors: {
-            background: '#34495e',
+            background: '#ecf0f1',
           },
         }}>
         <MainNavigator />

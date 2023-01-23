@@ -11,11 +11,15 @@ export const HomeScreen = () => {
     navigation.navigate(ROUTE.BOOKING);
   };
 
+  const onPressListBookings = () => {
+    navigation.navigate(ROUTE.LIST_BOOKINGS);
+  };
+
   return (
     <Container>
       <Button title="Book a time" onPress={onPressBookATime} />
       <Spacing height={16} />
-      <Button title="List booked times" onPress={onPressBookATime} />
+      <Button title="List booked times" onPress={onPressListBookings} />
     </Container>
   );
 };
