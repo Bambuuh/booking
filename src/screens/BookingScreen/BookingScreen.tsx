@@ -1,6 +1,6 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useContext, useMemo, useState} from 'react';
-import {Text} from 'react-native';
+import {Alert, Text} from 'react-native';
 import styled from 'styled-components/native';
 import {Button, Spacing} from '../../components';
 import {BookTimeItem} from '../../components/BookTimeItem';
@@ -52,7 +52,11 @@ export const BookingScreen = () => {
     };
 
     const id = addBooking(date, newBooking);
-    navigation.navigate(ROUTE.BOOKING_SUCCESS, {bookingId: id});
+    if (id > 0) {
+      navigation.navigate(ROUTE.BOOKING_SUCCESS, {bookingId: id});
+    } else {
+      Alert.alert('time is taken');
+    }
   };
 
   return (

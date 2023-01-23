@@ -45,7 +45,29 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
     return allBookingsForDay || [];
   };
 
+  const isTimeTaken = (newBooking: Omit<Booking, 'id'>) => {
+    const dailyBookings = getBookingsForDay(newBooking.startTime);
+    const start = newBooking.startTime.getTime();
+    const end = newBooking.endTime.getTime();
+    return dailyBookings.some(booking => {
+      const bookingStart = booking.startTime.getTime();
+      const bookingEnd = booking.endTime.getTime();
+      console.log(start > bookingStart);
+      console.log(start < bookingEnd);
+      return (
+        (start > bookingStart && start < bookingEnd) ||
+        (bookingStart > start && bookingStart < end)
+      );
+    });
+  };
+
   const addBooking = (date: Date, newBooking: Omit<Booking, 'id'>) => {
+    const isNotAvailable = isTimeTaken(newBooking);
+
+    if (isNotAvailable) {
+      return -1;
+    }
+
     const prettyDate = getPrettyDate(date);
     const oldDateBookings = bookings[prettyDate] ?? [];
     const id = new Date().getTime();
