@@ -27,10 +27,24 @@ export const BookingScreen = () => {
     return newDate;
   };
 
+  const onChangeDate = (newDate: Date) => {
+    setDate(newDate);
+    const newStartTime = new Date(startTime);
+    newStartTime.setFullYear(newDate.getFullYear());
+    newStartTime.setDate(newDate.getDate());
+    newStartTime.setMonth(newDate.getMonth());
+    setStartTime(newStartTime);
+
+    const newEndTime = new Date(endTime);
+    newEndTime.setFullYear(newDate.getFullYear());
+    newEndTime.setDate(newDate.getDate());
+    newEndTime.setMonth(newDate.getMonth());
+    setEndTime(newEndTime);
+  };
+
   const onPressBookTime = () => {
     const finalStartTime = mapDateToTime(startTime);
     const finalEndTime = mapDateToTime(endTime);
-    console.log(finalEndTime);
     const newBooking = {
       machine: 1,
       startTime: finalStartTime,
@@ -45,7 +59,7 @@ export const BookingScreen = () => {
     <Container>
       <DatePickerContainer>
         <Text>Date </Text>
-        <DatePicker date={date} onChange={setDate} />
+        <DatePicker date={date} onChange={onChangeDate} />
       </DatePickerContainer>
       <Spacing height={16} />
       <BookTimeItem
