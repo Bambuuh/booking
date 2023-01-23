@@ -13,7 +13,9 @@ export const ListBookingsScreen = () => {
 
   const todaysBookings = useMemo(() => {
     const prettyDate = getPrettyDate(date);
-    return bookings[prettyDate] || [];
+    return (bookings[prettyDate] || []).sort(
+      (a, b) => a.startTime.getTime() - b.startTime.getTime(),
+    );
   }, [bookings, date]);
 
   return (
