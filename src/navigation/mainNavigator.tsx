@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {BookingSuccess} from '../modals/BookingsSuccess';
-import {DatePicker} from '../modals/DatePicker';
+import {BookingSuccess} from '../modals/BookingsSuccessModal';
+import {DatePickerModal} from '../modals/DatePickerModal';
 import {BookingScreen, HomeScreen, ListBookingsScreen} from '../screens';
 import {ROUTE} from './routeNames';
 
@@ -20,12 +20,24 @@ export const MainNavigator = () => {
   return (
     <Navigator>
       <Group>
-        <Screen name={ROUTE.HOME} component={HomeScreen} />
-        <Screen name={ROUTE.BOOKING} component={BookingScreen} />
-        <Screen name={ROUTE.LIST_BOOKINGS} component={ListBookingsScreen} />
+        <Screen
+          options={{title: 'Home'}}
+          name={ROUTE.HOME}
+          component={HomeScreen}
+        />
+        <Screen
+          options={{title: 'Book laundry time'}}
+          name={ROUTE.BOOKING}
+          component={BookingScreen}
+        />
+        <Screen
+          options={{title: 'Bookings list'}}
+          name={ROUTE.LIST_BOOKINGS}
+          component={ListBookingsScreen}
+        />
       </Group>
       <Group screenOptions={{presentation: 'modal'}}>
-        <Screen name={ROUTE.DATE_PICKER} component={DatePicker} />
+        <Screen name={ROUTE.DATE_PICKER} component={DatePickerModal} />
         <Screen
           options={{headerShown: false}}
           name={ROUTE.BOOKING_SUCCESS}

@@ -6,7 +6,7 @@ import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {MainStackParamsList} from '../../navigation';
 
-export const DatePicker = () => {
+export const DatePickerModal = () => {
   const [date, setDate] = useState(new Date());
   const navigation = useNavigation<NavigationProp<MainStackParamsList>>();
 

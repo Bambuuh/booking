@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 import {Booking} from '../../context/booking';
-import {getPrettyDate, getPrettyTime} from '../../utils';
+import {getPrettyTime} from '../../utils';
 import {Spacing} from '../common';
 
 type BookingItemProps = {
@@ -10,11 +10,10 @@ type BookingItemProps = {
 };
 
 export const BookingItem = ({booking}: BookingItemProps) => {
-  const currentDate = new Date();
   const navigation = useNavigation();
 
   navigation.setOptions({
-    title: getPrettyDate(currentDate),
+    title: 'Bookings',
   });
 
   return (
