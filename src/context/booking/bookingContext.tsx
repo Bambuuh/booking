@@ -1,24 +1,24 @@
 import React, {createContext, ReactNode, useState} from 'react';
 import {getPrettyDate} from '../../utils';
 
-type MachineNumber = 1 | 2;
-
 export type Booking = {
-  machine: MachineNumber;
+  id: number;
+  machine: number;
   startTime: Date;
   endTime: Date;
 };
 
 type AvailableBooking = {
-  machine: MachineNumber;
+  machine: number;
   startTime: Date;
   endTime: Date;
 };
 
 type BookingsContextValue = {
   bookings: BookingMap;
-  addBooking: (date: Date, newBooking: Booking) => void;
+  addBooking: (date: Date, newBooking: Omit<Booking, 'id'>) => number;
   getBookingsForDay: (date: Date) => AvailableBooking[];
+  getBookingById: (bookingId: number) => Booking | null;
 };
 
 type BookingMap = {
@@ -27,8 +27,9 @@ type BookingMap = {
 
 export const BookingContext = createContext<BookingsContextValue>({
   bookings: {},
-  addBooking: () => null,
+  addBooking: () => 0,
   getBookingsForDay: () => [],
+  getBookingById: () => null,
 });
 
 type BookingProviderProps = {
@@ -44,14 +45,36 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
     return allBookingsForDay || [];
   };
 
-  const addBooking = (date: Date, newBooking: Booking) => {
+  const addBooking = (date: Date, newBooking: Omit<Booking, 'id'>) => {
     const prettyDate = getPrettyDate(date);
     const oldDateBookings = bookings[prettyDate] ?? [];
-    setBookings({...bookings, [prettyDate]: [...oldDateBookings, newBooking]});
+    const id = new Date().getTime();
+    const finalBooking: Booking = {...newBooking, id};
+
+    setBookings({
+      ...bookings,
+      [prettyDate]: [...oldDateBookings, finalBooking],
+    });
+
+    return id;
+  };
+
+  const getBookingById = (bookingId: number) => {
+    let finalBooking: Booking | null = null;
+    Object.keys(bookings).some(key => {
+      const booking = bookings[key].find(b => b.id === bookingId);
+      if (booking) {
+        finalBooking = booking;
+        return true;
+      }
+    });
+
+    return finalBooking;
   };
 
   return (
-    <BookingContext.Provider value={{bookings, addBooking, getBookingsForDay}}>
+    <BookingContext.Provider
+      value={{bookings, addBooking, getBookingsForDay, getBookingById}}>
       {children}
     </BookingContext.Provider>
   );

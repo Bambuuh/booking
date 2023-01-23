@@ -1,5 +1,7 @@
 import React, {useMemo} from 'react';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
+import {Spacing} from '../../components';
 import {BookingItem} from '../../components/BookingItem';
 import {useBookingContext} from '../../context/booking';
 import {theme} from '../../theme';
@@ -15,8 +17,11 @@ export const ListBookingsScreen = () => {
 
   return (
     <Container>
-      {todaysBookings.map(booking => (
-        <BookingItem booking={booking} key={booking.startTime.getTime()} />
+      {todaysBookings.map((booking, index) => (
+        <View key={booking.startTime.getTime()}>
+          <BookingItem booking={booking} />
+          {index < todaysBookings.length && <Spacing height={4} />}
+        </View>
       ))}
     </Container>
   );

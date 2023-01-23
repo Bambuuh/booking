@@ -14,3 +14,18 @@ export const getPrettyDate = (date?: Date) => {
 
   return `${year}-${month}-${day}`;
 };
+
+export const getPrettyTime = (date: Date) => {
+  const hours = date.getHours() > 9 ? date.getHours() : `0${date.getHours()}`;
+  const minutes =
+    date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+
+  return `${hours}:${minutes}`;
+};
+
+export const getPrettyDateWithTime = (date: Date) => {
+  const prettyDate = getPrettyDate(date);
+  const prettyTime = getPrettyTime(date);
+
+  return `${prettyDate} ${prettyTime}`;
+};

@@ -3,8 +3,8 @@ import React, {useContext, useMemo, useState} from 'react';
 import styled from 'styled-components/native';
 import {Button, Spacing} from '../../components';
 import {BookTimeItem} from '../../components/BookTimeItem';
-import {Booking, BookingContext} from '../../context/booking/bookingContext';
-import {MainStackParamsList} from '../../navigation';
+import {BookingContext} from '../../context/booking/bookingContext';
+import {MainStackParamsList, ROUTE} from '../../navigation';
 import {theme} from '../../theme';
 import {getPrettyDate} from '../../utils';
 
@@ -23,13 +23,14 @@ export const BookingScreen = () => {
   const minimumStartDate = useMemo(() => new Date(), []);
 
   const onPressBookTime = () => {
-    const newBooking: Booking = {
+    const newBooking = {
       endTime,
       machine: 1,
       startTime,
     };
 
-    addBooking(currentDate, newBooking);
+    const id = addBooking(currentDate, newBooking);
+    navigation.navigate(ROUTE.BOOKING_SUCCESS, {bookingId: id});
   };
 
   return (
