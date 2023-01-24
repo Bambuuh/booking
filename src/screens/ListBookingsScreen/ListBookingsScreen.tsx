@@ -28,7 +28,8 @@ export const ListBookingsScreen = () => {
       <DatePicker date={date} onChange={setDate} />
       <Spacing height={32} />
       {todaysBookings.map((booking, index) => (
-        <BookingItemContainer key={booking.startTime.getTime()}>
+        <BookingItemContainer
+          key={`${booking.startTime.getTime()}-${booking.room}`}>
           <BookingItem onPressRemove={onPressRemove} booking={booking} />
           {index < todaysBookings.length && <Spacing height={4} />}
         </BookingItemContainer>

@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 import {Booking} from '../../context/booking';
@@ -10,12 +9,6 @@ type BookingItemProps = {
 };
 
 export const BookingItem = ({booking, onPressRemove}: BookingItemProps) => {
-  const navigation = useNavigation();
-
-  navigation.setOptions({
-    title: 'Bookings',
-  });
-
   const onPressRemoveButton = () => {
     onPressRemove(booking.id);
   };
@@ -24,7 +17,7 @@ export const BookingItem = ({booking, onPressRemove}: BookingItemProps) => {
     <Container>
       <Title>Start: {getPrettyTime(booking.startTime)}</Title>
       <Title>End: {getPrettyTime(booking.endTime)}</Title>
-      <Title>Machine: {booking.machine}</Title>
+      <Title>Room: {booking.room}</Title>
       <RemoveButton onPress={onPressRemoveButton}>
         <RemoveButtonImage source={require('./remove.png')} />
       </RemoveButton>

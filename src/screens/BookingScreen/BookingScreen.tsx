@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 import {Button, Spacing} from '../../components';
 import {BookTimeItem} from '../../components/BookTimeItem';
 import {DatePicker} from '../../components/DatePicker';
-import {useBookingContext} from '../../context/booking';
+import {NewBooking, useBookingContext} from '../../context/booking';
 import {MainStackParamsList, ROUTE} from '../../navigation';
 import {theme} from '../../theme';
 
@@ -44,8 +44,7 @@ export const BookingScreen = () => {
   const onPressBookTime = () => {
     const finalStartTime = mapDateToTime(startTime);
     const finalEndTime = mapDateToTime(endTime);
-    const newBooking = {
-      machine: 1,
+    const newBooking: NewBooking = {
       startTime: finalStartTime,
       endTime: finalEndTime,
     };

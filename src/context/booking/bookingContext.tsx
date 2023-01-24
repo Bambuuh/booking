@@ -3,20 +3,22 @@ import {getPrettyDate} from '../../utils';
 
 export type Booking = {
   id: number;
-  machine: number;
+  room: 1 | 2;
   startTime: Date;
   endTime: Date;
 };
 
+export type NewBooking = Omit<Booking, 'id' | 'room'>;
+
 type AvailableBooking = {
-  machine: number;
+  room: number;
   startTime: Date;
   endTime: Date;
 };
 
 type BookingsContextValue = {
   bookings: BookingMap;
-  addBooking: (date: Date, newBooking: Omit<Booking, 'id'>) => number;
+  addBooking: (date: Date, newBooking: NewBooking) => number;
   getBookingsForDay: (date: Date) => AvailableBooking[];
   getBookingById: (bookingId: number) => Booking | null;
   removeBookingByDateAndId: (date: Date, id: number) => void;
@@ -47,31 +49,54 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
     return allBookingsForDay || [];
   };
 
-  const isTimeTaken = (newBooking: Omit<Booking, 'id'>) => {
-    const dailyBookings = getBookingsForDay(newBooking.startTime);
+  const isRoomBusy = (
+    newBooking: NewBooking,
+    bookingsList: Booking[],
+    room: number,
+  ) => {
     const start = newBooking.startTime.getTime();
     const end = newBooking.endTime.getTime();
-    return dailyBookings.some(booking => {
+
+    return bookingsList.some(booking => {
       const bookingStart = booking.startTime.getTime();
       const bookingEnd = booking.endTime.getTime();
-      return (
-        (start > bookingStart && start < bookingEnd) ||
-        (bookingStart > start && bookingStart < end)
-      );
+      const bookingRoom = booking.room;
+
+      const isRightRoom = bookingRoom === room;
+      const startIsOverlapping = start >= bookingStart && start < bookingEnd;
+      const endIsOverlapping = bookingStart >= start && bookingStart < end;
+
+      return isRightRoom && (startIsOverlapping || endIsOverlapping);
     });
   };
 
-  const addBooking = (date: Date, newBooking: Omit<Booking, 'id'>) => {
-    const isNotAvailable = isTimeTaken(newBooking);
+  const getAvailableRoom = (newBooking: NewBooking) => {
+    const dailyBookings = getBookingsForDay(newBooking.startTime);
+    const bookingsRoomOne = dailyBookings.filter(b => b.room === 1);
+    const bookingsRoomTwo = dailyBookings.filter(b => b.room === 2);
 
-    if (isNotAvailable) {
+    const isRoomOneBusy = isRoomBusy(newBooking, bookingsRoomOne, 1);
+    const isRoomTwoBusy = isRoomBusy(newBooking, bookingsRoomTwo, 2);
+
+    if (isRoomOneBusy && isRoomTwoBusy) {
+      return -1;
+    } else if (!isRoomOneBusy) {
+      return 1;
+    }
+    return 2;
+  };
+
+  const addBooking = (date: Date, newBooking: NewBooking) => {
+    const availableRoom = getAvailableRoom(newBooking);
+
+    if (availableRoom === -1) {
       return -1;
     }
 
     const prettyDate = getPrettyDate(date);
     const oldDateBookings = bookings[prettyDate] ?? [];
     const id = new Date().getTime();
-    const finalBooking: Booking = {...newBooking, id};
+    const finalBooking: Booking = {...newBooking, room: availableRoom, id};
 
     setBookings({
       ...bookings,
