@@ -23,7 +23,6 @@ export const BookingScreen = () => {
     newDate.setHours(timeToUse.getHours());
     newDate.setMinutes(timeToUse.getMinutes());
     newDate.setSeconds(0);
-    console.log(newDate);
     return newDate;
   };
 

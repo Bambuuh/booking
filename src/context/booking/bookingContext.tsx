@@ -52,8 +52,6 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
     return dailyBookings.some(booking => {
       const bookingStart = booking.startTime.getTime();
       const bookingEnd = booking.endTime.getTime();
-      console.log(start > bookingStart);
-      console.log(start < bookingEnd);
       return (
         (start > bookingStart && start < bookingEnd) ||
         (bookingStart > start && bookingStart < end)
