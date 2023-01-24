@@ -16,8 +16,15 @@ export const App = () => {
     <BookingProvider>
       <NavigationContainer
         theme={{
+          dark: true,
           colors: {
-            background: '#ecf0f1',
+            // background: '#2c3e50',
+            background: 'white',
+            text: '#FFF',
+            border: '#ecf0f1',
+            card: '#34495e',
+            notification: '#FFF',
+            primary: '#FFF',
           },
         }}>
         <MainNavigator />
