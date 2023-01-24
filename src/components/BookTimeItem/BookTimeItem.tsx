@@ -8,6 +8,7 @@ type BookTimeItemProps = {
   title: string;
   date: Date;
   minimumDate: Date;
+  maximumDate: Date;
   onChange: (date: Date) => void;
 };
 
@@ -16,6 +17,7 @@ export const BookTimeItem = ({
   date,
   onChange,
   minimumDate,
+  maximumDate,
 }: BookTimeItemProps) => {
   const onDateChange = (event: DateTimePickerEvent) => {
     const {
@@ -31,6 +33,7 @@ export const BookTimeItem = ({
       <Title>{title}</Title>
       <RNDateTimePicker
         is24Hour
+        maximumDate={maximumDate}
         minimumDate={minimumDate}
         mode="time"
         value={date}

@@ -18,7 +18,25 @@ export const BookingScreen = () => {
   const navigation = useNavigation<NavigationProp<MainStackParamsList>>();
   const {addBooking} = useBookingContext();
 
-  const minimumStartDate = useMemo(() => new Date(), []);
+  const minimumStartDate = useMemo(() => {
+    const now = new Date();
+    const hourSeven = new Date(date);
+    hourSeven.setHours(7);
+    hourSeven.setMinutes(0);
+    hourSeven.setSeconds(0);
+    if (now.getTime() > hourSeven.getTime()) {
+      return now;
+    }
+    return hourSeven;
+  }, [date]);
+
+  const maximumEndDate = useMemo(() => {
+    const hourTwentyTwo = new Date(date);
+    hourTwentyTwo.setHours(22);
+    hourTwentyTwo.setMinutes(0);
+    hourTwentyTwo.setSeconds(0);
+    return hourTwentyTwo;
+  }, [date]);
 
   const mapDateToTime = (timeToUse: Date) => {
     const newDate = new Date(date);
@@ -69,12 +87,14 @@ export const BookingScreen = () => {
       <BookTimeItem
         date={startTime}
         minimumDate={minimumStartDate}
+        maximumDate={maximumEndDate}
         onChange={setStartTime}
         title="Start time"
       />
       <Spacing height={8} />
       <BookTimeItem
         minimumDate={startTime}
+        maximumDate={maximumEndDate}
         date={endTime}
         onChange={setEndTime}
         title="End time"
