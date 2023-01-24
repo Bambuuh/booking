@@ -5,14 +5,13 @@ import styled from 'styled-components/native';
 import {Spacing} from '../../components';
 import {DatePicker} from '../../components/DatePicker';
 import {NewBookingItem} from '../../components/NewBookingItem';
-import {NewBooking, useBookingContext} from '../../context/booking';
+import {useBookingContext} from '../../context/booking';
 import {MainStackParamsList, ROUTE} from '../../navigation';
 import {theme} from '../../theme';
 
 export const BookingScreen = () => {
   const navigation = useNavigation<NavigationProp<MainStackParamsList>>();
-  const {addBooking, getBookingsByDate, getFirstAvailableBookingDate} =
-    useBookingContext();
+  const {getBookingsByDate, getFirstAvailableBookingDate} = useBookingContext();
   const [date, setDate] = useState(getFirstAvailableBookingDate(new Date()));
 
   const todaysBookings = useMemo(
@@ -35,14 +34,12 @@ export const BookingScreen = () => {
       <Spacing height={32} />
       {todaysBookings.map((booking, index) => {
         const onPressRoom = (roomNumber: 1 | 2) => {
-          console.log(booking);
-          const newBooking: NewBooking = {
-            startTime: booking.startTime,
-            endTime: booking.endTime,
+          const newBooking = {
+            startTime: booking.startTime.getTime(),
+            endTime: booking.endTime.getTime(),
             room: roomNumber,
           };
-          const id = addBooking(newBooking);
-          navigation.navigate(ROUTE.BOOKING_SUCCESS, {bookingId: id});
+          navigation.navigate(ROUTE.BOOKING_PROMPT, {booking: newBooking});
         };
 
         return (
