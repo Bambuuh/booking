@@ -11,7 +11,9 @@ import {theme} from '../../theme';
 
 export const BookingScreen = () => {
   const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(
+    new Date(new Date().setMinutes(new Date().getMinutes() + 30)),
+  );
   const [date, setDate] = useState(new Date());
   const navigation = useNavigation<NavigationProp<MainStackParamsList>>();
   const {addBooking} = useBookingContext();
