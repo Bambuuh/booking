@@ -9,7 +9,7 @@ import {getPrettyDate} from '../../utils';
 
 export const ListBookingsScreen = () => {
   const [date, setDate] = useState(new Date());
-  const {bookings} = useBookingContext();
+  const {bookings, removeBookingByDateAndId} = useBookingContext();
 
   const todaysBookings = useMemo(() => {
     const prettyDate = getPrettyDate(date);
@@ -18,6 +18,10 @@ export const ListBookingsScreen = () => {
     );
   }, [bookings, date]);
 
+  const onPressRemove = (bookingId: number) => {
+    removeBookingByDateAndId(date, bookingId);
+  };
+
   return (
     <Container>
       <Spacing height={16} />
@@ -25,7 +29,7 @@ export const ListBookingsScreen = () => {
       <Spacing height={32} />
       {todaysBookings.map((booking, index) => (
         <BookingItemContainer key={booking.startTime.getTime()}>
-          <BookingItem booking={booking} />
+          <BookingItem onPressRemove={onPressRemove} booking={booking} />
           {index < todaysBookings.length && <Spacing height={4} />}
         </BookingItemContainer>
       ))}

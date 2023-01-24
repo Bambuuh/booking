@@ -3,27 +3,31 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {Booking} from '../../context/booking';
 import {getPrettyTime} from '../../utils';
-import {Spacing} from '../common';
 
 type BookingItemProps = {
   booking: Booking;
+  onPressRemove: (id: number) => void;
 };
 
-export const BookingItem = ({booking}: BookingItemProps) => {
+export const BookingItem = ({booking, onPressRemove}: BookingItemProps) => {
   const navigation = useNavigation();
 
   navigation.setOptions({
     title: 'Bookings',
   });
 
+  const onPressRemoveButton = () => {
+    onPressRemove(booking.id);
+  };
+
   return (
     <Container>
-      <LeftSide>
-        <Title>Start time: {getPrettyTime(booking.startTime)}</Title>
-        <Spacing height={4} />
-        <Title>End time: {getPrettyTime(booking.endTime)}</Title>
-      </LeftSide>
+      <Title>Start: {getPrettyTime(booking.startTime)}</Title>
+      <Title>End: {getPrettyTime(booking.endTime)}</Title>
       <Title>Machine: {booking.machine}</Title>
+      <RemoveButton onPress={onPressRemoveButton}>
+        <RemoveButtonImage source={require('./remove.png')} />
+      </RemoveButton>
     </Container>
   );
 };
@@ -34,13 +38,27 @@ const Container = styled.View`
   align-items: center;
   align-self: stretch;
   height: 52px;
-  background-color: #9b59b6;
-  border-radius: 4px;
-  padding: 0 16px 0 16px;
+  background-color: #fff;
+  border-color: #2980b9;
+  border-width: 1px;
+  border-radius: 12px;
+  padding-left: 16px;
 `;
 
-const LeftSide = styled.View``;
+const Title = styled.Text``;
 
-const Title = styled.Text`
-  color: #fff;
+const RemoveButton = styled.TouchableOpacity`
+  background-color: #e74c3c;
+  height: 50px;
+  width: 50px;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+`;
+
+const RemoveButtonImage = styled.Image`
+  height: 24px;
+  width: 24px;
+  background-color: transparent;
 `;

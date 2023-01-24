@@ -19,6 +19,7 @@ type BookingsContextValue = {
   addBooking: (date: Date, newBooking: Omit<Booking, 'id'>) => number;
   getBookingsForDay: (date: Date) => AvailableBooking[];
   getBookingById: (bookingId: number) => Booking | null;
+  removeBookingByDateAndId: (date: Date, id: number) => void;
 };
 
 type BookingMap = {
@@ -30,6 +31,7 @@ export const BookingContext = createContext<BookingsContextValue>({
   addBooking: () => 0,
   getBookingsForDay: () => [],
   getBookingById: () => null,
+  removeBookingByDateAndId: () => null,
 });
 
 type BookingProviderProps = {
@@ -79,6 +81,13 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
     return id;
   };
 
+  const removeBookingByDateAndId = (date: Date, id: number) => {
+    const prettyDate = getPrettyDate(date);
+    const dateBookings = bookings[prettyDate];
+    const filteredBookings = dateBookings.filter(b => b.id !== id);
+    setBookings({...bookings, [prettyDate]: filteredBookings});
+  };
+
   const getBookingById = (bookingId: number) => {
     let finalBooking: Booking | null = null;
     Object.keys(bookings).some(key => {
@@ -94,7 +103,13 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
 
   return (
     <BookingContext.Provider
-      value={{bookings, addBooking, getBookingsForDay, getBookingById}}>
+      value={{
+        bookings,
+        addBooking,
+        getBookingsForDay,
+        getBookingById,
+        removeBookingByDateAndId,
+      }}>
       {children}
     </BookingContext.Provider>
   );
