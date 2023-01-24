@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import {Button, Spacing} from '../../components';
 import {useBookingContext} from '../../context/booking';
 import {MainStackParamsList, ROUTE} from '../../navigation';
-import {getPrettyDateWithTime} from '../../utils';
+import {getPrettyDate, getPrettyTime} from '../../utils';
 
 export const BookingSuccess = () => {
   const navigation = useNavigation();
@@ -30,11 +30,18 @@ export const BookingSuccess = () => {
     <Container>
       <Title>Booking Successful</Title>
       <Spacing height={16} />
-      <DateText>
-        Start time: {getPrettyDateWithTime(booking?.startTime)}
-      </DateText>
-      <DateText>End time: {getPrettyDateWithTime(booking?.endTime)}</DateText>
-      <Spacing height={16} />
+      <RowContainer>
+        <DateText>Date:</DateText>
+        <DateText>{getPrettyDate(booking?.startTime)}</DateText>
+      </RowContainer>
+      <Spacing height={8} />
+      <RowContainer>
+        <DateText>Time:</DateText>
+        <DateText>
+          {getPrettyTime(booking?.startTime)} - {getPrettyTime(booking.endTime)}
+        </DateText>
+      </RowContainer>
+      <Spacing height={32} />
       <Button title="Close" onPress={onPressClose} />
     </Container>
   );
@@ -46,8 +53,18 @@ const Container = styled.View`
   justify-content: center;
 `;
 
-const Title = styled.Text`
-  font-size: 18px;
+const RowContainer = styled.View`
+  width: 180px;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
-const DateText = styled.Text``;
+const Title = styled.Text`
+  font-weight: 500;
+  font-size: 24px;
+`;
+
+const DateText = styled.Text`
+  font-size: 18px;
+  font-weight: 500;
+`;
