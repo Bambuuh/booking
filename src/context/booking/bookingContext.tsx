@@ -8,7 +8,14 @@ export type Booking = {
   endTime: Date;
 };
 
-export type NewBooking = Omit<Booking, 'id' | 'room'>;
+export type NewBooking = Omit<Booking, 'id'>;
+
+export type BookingListItem = {
+  startTime: Date;
+  endTime: Date;
+  roomOneBooked: boolean;
+  roomTwoBooked: boolean;
+};
 
 type AvailableBooking = {
   room: number;
@@ -18,10 +25,12 @@ type AvailableBooking = {
 
 type BookingsContextValue = {
   bookings: BookingMap;
-  addBooking: (date: Date, newBooking: NewBooking) => number;
+  addBooking: (newBooking: NewBooking) => number;
   getBookingsForDay: (date: Date) => AvailableBooking[];
   getBookingById: (bookingId: number) => Booking | null;
   removeBookingByDateAndId: (date: Date, id: number) => void;
+  getBookingsByDate: (date: Date) => BookingListItem[];
+  getFirstAvailableBookingDate: (date: Date) => Date;
 };
 
 type BookingMap = {
@@ -34,6 +43,10 @@ export const BookingContext = createContext<BookingsContextValue>({
   getBookingsForDay: () => [],
   getBookingById: () => null,
   removeBookingByDateAndId: () => null,
+  getBookingsByDate: () => [],
+  getFirstAvailableBookingDate: () => {
+    return new Date();
+  },
 });
 
 type BookingProviderProps = {
@@ -49,54 +62,61 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
     return allBookingsForDay || [];
   };
 
-  const isRoomBusy = (
-    newBooking: NewBooking,
-    bookingsList: Booking[],
-    room: number,
-  ) => {
-    const start = newBooking.startTime.getTime();
-    const end = newBooking.endTime.getTime();
+  const getBookingsByDate = (date: Date) => {
+    const bookingsForDate = getBookingsForDay(date);
 
-    return bookingsList.some(booking => {
-      const bookingStart = booking.startTime.getTime();
-      const bookingEnd = booking.endTime.getTime();
-      const bookingRoom = booking.room;
+    const dailyBookings: BookingListItem[] = [];
+    let startTime = new Date(date);
+    let endTime = new Date(date);
 
-      const isRightRoom = bookingRoom === room;
-      const startIsOverlapping = start >= bookingStart && start < bookingEnd;
-      const endIsOverlapping = bookingStart >= start && bookingStart < end;
+    startTime.setHours(7);
+    startTime.setMinutes(0);
+    startTime.setSeconds(0);
 
-      return isRightRoom && (startIsOverlapping || endIsOverlapping);
-    });
-  };
+    endTime.setHours(10);
+    endTime.setMinutes(0);
+    endTime.setSeconds(0);
 
-  const getAvailableRoom = (newBooking: NewBooking) => {
-    const dailyBookings = getBookingsForDay(newBooking.startTime);
-    const bookingsRoomOne = dailyBookings.filter(b => b.room === 1);
-    const bookingsRoomTwo = dailyBookings.filter(b => b.room === 2);
-
-    const isRoomOneBusy = isRoomBusy(newBooking, bookingsRoomOne, 1);
-    const isRoomTwoBusy = isRoomBusy(newBooking, bookingsRoomTwo, 2);
-
-    if (isRoomOneBusy && isRoomTwoBusy) {
-      return -1;
-    } else if (!isRoomOneBusy) {
-      return 1;
-    }
-    return 2;
-  };
-
-  const addBooking = (date: Date, newBooking: NewBooking) => {
-    const availableRoom = getAvailableRoom(newBooking);
-
-    if (availableRoom === -1) {
-      return -1;
+    for (let i = 0; i < 5; i++) {
+      const roomOneBooked = bookingsForDate.some(
+        b => b.room === 1 && b.startTime.getHours() === startTime.getHours(),
+      );
+      const roomTwoBooked = bookingsForDate.some(
+        b => b.room === 2 && b.startTime.getHours() === startTime.getHours(),
+      );
+      dailyBookings.push({
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+        roomOneBooked,
+        roomTwoBooked,
+      });
+      startTime.setHours(startTime.getHours() + 3);
+      endTime.setHours(endTime.getHours() + 3);
     }
 
-    const prettyDate = getPrettyDate(date);
+    return dailyBookings;
+  };
+
+  const getFirstAvailableBookingDate = (dateToUse: Date): Date => {
+    const date = new Date(dateToUse);
+    const dailyBookings = getBookingsByDate(date);
+    const isAnyBookingFree = dailyBookings.some(
+      booking => !booking.roomOneBooked || !booking.roomTwoBooked,
+    );
+
+    if (isAnyBookingFree) {
+      return date;
+    }
+
+    date.setDate(date.getDate() + 1);
+    return getFirstAvailableBookingDate(date);
+  };
+
+  const addBooking = (newBooking: NewBooking) => {
+    const prettyDate = getPrettyDate(newBooking.startTime);
     const oldDateBookings = bookings[prettyDate] ?? [];
     const id = new Date().getTime();
-    const finalBooking: Booking = {...newBooking, room: availableRoom, id};
+    const finalBooking: Booking = {...newBooking, id};
 
     setBookings({
       ...bookings,
@@ -134,6 +154,8 @@ export const BookingProvider = ({children}: BookingProviderProps) => {
         getBookingsForDay,
         getBookingById,
         removeBookingByDateAndId,
+        getFirstAvailableBookingDate,
+        getBookingsByDate,
       }}>
       {children}
     </BookingContext.Provider>

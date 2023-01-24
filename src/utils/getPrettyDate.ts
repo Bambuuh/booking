@@ -1,5 +1,5 @@
 export const getPrettyDate = (date?: Date) => {
-  const toPrettify = date ?? new Date();
+  const toPrettify = date ? new Date(date) : new Date();
 
   const year = toPrettify.getFullYear();
   const month =
@@ -15,7 +15,8 @@ export const getPrettyDate = (date?: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export const getPrettyTime = (date: Date) => {
+export const getPrettyTime = (dateToUse: Date) => {
+  const date = new Date(dateToUse);
   const hours = date.getHours() > 9 ? date.getHours() : `0${date.getHours()}`;
   const minutes =
     date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
@@ -23,7 +24,8 @@ export const getPrettyTime = (date: Date) => {
   return `${hours}:${minutes}`;
 };
 
-export const getPrettyDateWithTime = (date: Date) => {
+export const getPrettyDateWithTime = (dateToUse: Date) => {
+  const date = new Date(dateToUse);
   const prettyDate = getPrettyDate(date);
   const prettyTime = getPrettyTime(date);
 
