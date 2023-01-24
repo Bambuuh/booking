@@ -1,11 +1,11 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useContext, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Alert, Text} from 'react-native';
 import styled from 'styled-components/native';
 import {Button, Spacing} from '../../components';
 import {BookTimeItem} from '../../components/BookTimeItem';
 import {DatePicker} from '../../components/DatePicker';
-import {BookingContext} from '../../context/booking/bookingContext';
+import {useBookingContext} from '../../context/booking';
 import {MainStackParamsList, ROUTE} from '../../navigation';
 import {theme} from '../../theme';
 
@@ -14,7 +14,7 @@ export const BookingScreen = () => {
   const [endTime, setEndTime] = useState(new Date());
   const [date, setDate] = useState(new Date());
   const navigation = useNavigation<NavigationProp<MainStackParamsList>>();
-  const {addBooking} = useContext(BookingContext);
+  const {addBooking} = useBookingContext();
 
   const minimumStartDate = useMemo(() => new Date(), []);
 
