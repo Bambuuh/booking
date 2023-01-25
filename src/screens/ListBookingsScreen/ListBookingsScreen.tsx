@@ -1,4 +1,5 @@
 import React, {useMemo, useState} from 'react';
+import {Text} from 'react-native';
 import styled from 'styled-components/native';
 import {Spacing} from '../../components';
 import {BookingItem} from '../../components/BookingItem';
@@ -25,13 +26,24 @@ export const ListBookingsScreen = () => {
   return (
     <Container>
       <Spacing height={16} />
-      <DatePicker date={date} onChange={setDate} />
+
+      <DatePickerContainer>
+        <Text>Select date:</Text>
+        <Spacing height={8} />
+        <DatePicker date={date} onChange={setDate} />
+      </DatePickerContainer>
       <Spacing height={32} />
       {todaysBookings.map((booking, index) => (
         <BookingItemContainer
           key={`${booking.startTime.getTime()}-${booking.room}`}>
-          <BookingItem onPressRemove={onPressRemove} booking={booking} />
-          {index < todaysBookings.length && <Spacing height={4} />}
+          <BookingItem
+            isFirst={index === 0}
+            isLast={index === todaysBookings.length - 1}
+            isSolo={todaysBookings.length === 1}
+            onPressRemove={onPressRemove}
+            booking={booking}
+          />
+          {index < todaysBookings.length && <Spacing height={1} />}
         </BookingItemContainer>
       ))}
     </Container>
@@ -46,4 +58,10 @@ const Container = styled.View`
 
 const BookingItemContainer = styled.View`
   align-self: stretch;
+`;
+
+const DatePickerContainer = styled.View`
+  width: 180px;
+  justify-content: space-between;
+  align-items: center;
 `;

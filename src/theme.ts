@@ -1,3 +1,3 @@
 export const theme = {
-  screenPadding: 16,
+  screenPadding: 24,
 };

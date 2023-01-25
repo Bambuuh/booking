@@ -7,9 +7,18 @@ import {Spacing} from '../common';
 type NewBookingItemProps = {
   booking: BookingListItem;
   onPressRoom: (roomNumber: 1 | 2) => void;
+  isFirst?: boolean;
+  isLast?: boolean;
+  isSolo?: boolean;
 };
 
-export const NewBookingItem = ({booking, onPressRoom}: NewBookingItemProps) => {
+export const NewBookingItem = ({
+  booking,
+  isFirst = false,
+  isLast = false,
+  isSolo = false,
+  onPressRoom,
+}: NewBookingItemProps) => {
   const onPressRoomOne = () => {
     onPressRoom(1);
   };
@@ -19,7 +28,11 @@ export const NewBookingItem = ({booking, onPressRoom}: NewBookingItemProps) => {
   };
 
   return (
-    <Container fullyBooked={booking.roomOneBooked && booking.roomTwoBooked}>
+    <Container
+      isFirst={isFirst}
+      isLast={isLast}
+      isSolo={isSolo}
+      fullyBooked={booking.roomOneBooked && booking.roomTwoBooked}>
       <LeftContainer>
         <Title>Starts: {getPrettyTime(booking.startTime)}</Title>
         <Spacing height={8} />
@@ -44,8 +57,12 @@ export const NewBookingItem = ({booking, onPressRoom}: NewBookingItemProps) => {
   );
 };
 
-const Container = styled.View<{fullyBooked: boolean}>`
-  border-radius: 8px;
+const Container = styled.View<{
+  fullyBooked: boolean;
+  isFirst: boolean;
+  isLast: boolean;
+  isSolo: boolean;
+}>`
   padding: 0 12px;
   flex-direction: row;
   align-self: stretch;
@@ -53,9 +70,16 @@ const Container = styled.View<{fullyBooked: boolean}>`
   justify-content: space-between;
   height: 80px;
   background-color: #fff;
-  border-color: #3498db;
-  border-width: 1px;
   ${({fullyBooked}) => fullyBooked && 'opacity: 0.3;'};
+
+  ${({isFirst, isSolo}) => (isFirst || isSolo) && 'border-top-left-radius: 8px'}
+  ${({isFirst, isSolo}) =>
+    (isFirst || isSolo) && 'border-top-right-radius: 8px'}
+
+  ${({isLast, isSolo}) =>
+    (isLast || isSolo) && 'border-bottom-left-radius: 8px'}
+  ${({isLast, isSolo}) =>
+    (isLast || isSolo) && 'border-bottom-right-radius: 8px'}
 `;
 
 const LeftContainer = styled.View`

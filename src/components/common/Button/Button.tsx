@@ -15,7 +15,7 @@ export const Button = ({title, variant, onPress}: ButtonProps) => {
       case 'success':
         return '#27ae60';
       default:
-        return '#2980b9';
+        return '#3498db';
     }
   };
 
@@ -30,7 +30,7 @@ const Container = styled.TouchableOpacity<{color: string}>`
   height: 40px;
   width: 200px;
   background-color: ${({color}) => color};
-  border-radius: 20px;
+  border-radius: 8px;
   align-items: center;
   justify-content: center;
 `;

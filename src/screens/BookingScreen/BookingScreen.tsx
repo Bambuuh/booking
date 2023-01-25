@@ -41,11 +41,17 @@ export const BookingScreen = () => {
           };
           navigation.navigate(ROUTE.BOOKING_PROMPT, {booking: newBooking});
         };
-
+        console.log(index);
         return (
           <NewBookingContainer key={booking.startTime.getTime()}>
-            <NewBookingItem onPressRoom={onPressRoom} booking={booking} />
-            {index < todaysBookings.length - 1 && <Spacing height={8} />}
+            <NewBookingItem
+              isFirst={index === 0}
+              isLast={index === todaysBookings.length - 1}
+              isSolo={todaysBookings.length === 1}
+              onPressRoom={onPressRoom}
+              booking={booking}
+            />
+            {index < todaysBookings.length - 1 && <Spacing height={1} />}
           </NewBookingContainer>
         );
       })}
