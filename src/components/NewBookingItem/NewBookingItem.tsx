@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {BookingListItem} from '../../context/booking';
+import {BookingListItem, RoomNumber} from '../../context/booking';
 import {getPrettyTime} from '../../utils';
 import {Spacing} from '../common';
 
 type NewBookingItemProps = {
   booking: BookingListItem;
-  onPressRoom: (roomNumber: 1 | 2) => void;
+  onPressRoom: (roomNumber: RoomNumber) => void;
   isFirst?: boolean;
   isLast?: boolean;
   isSolo?: boolean;

@@ -1,5 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
+import {RoomNumber} from '../context/booking';
 import {BookingSuccess} from '../modals/BookingsPromptModal';
 import {DatePickerModal} from '../modals/DatePickerModal';
 import {BookingScreen, HomeScreen, ListBookingsScreen} from '../screens';
@@ -11,7 +12,7 @@ export type MainStackParamsList = {
   [ROUTE.DATE_PICKER]: undefined;
   [ROUTE.LIST_BOOKINGS]: undefined;
   [ROUTE.BOOKING_PROMPT]: {
-    booking: {room: 1 | 2; startTime: number; endTime: number};
+    booking: {room: RoomNumber; startTime: number; endTime: number};
   };
 };
 

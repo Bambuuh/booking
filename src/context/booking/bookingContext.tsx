@@ -1,9 +1,11 @@
 import React, {createContext, ReactNode, useState} from 'react';
 import {getPrettyDate} from '../../utils';
 
+export type RoomNumber = 1 | 2;
+
 export type Booking = {
   id: number;
-  room: 1 | 2;
+  room: RoomNumber;
   startTime: Date;
   endTime: Date;
 };

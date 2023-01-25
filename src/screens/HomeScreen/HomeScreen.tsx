@@ -1,8 +1,7 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
-import styled from 'styled-components/native';
-import {Button, Spacing} from '../../components';
 import {MainStackParamsList, ROUTE} from '../../navigation';
+import {HomeScreenContent} from './HomeScreenContent';
 
 export const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<MainStackParamsList>>();
@@ -16,16 +15,9 @@ export const HomeScreen = () => {
   };
 
   return (
-    <Container>
-      <Button title="Book a time" onPress={onPressBookATime} />
-      <Spacing height={16} />
-      <Button title="List booked times" onPress={onPressListBookings} />
-    </Container>
+    <HomeScreenContent
+      onPressBookATime={onPressBookATime}
+      onPressListBookings={onPressListBookings}
+    />
   );
 };
-
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-`;
